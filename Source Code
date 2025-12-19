@@ -1,0 +1,61 @@
+// Saqib Ali Khan - SZABIST University Islamabad
+pragma solidity ^0.8.19;
+
+contract StudentManager {
+
+    // 1. Define the Student struct
+    struct Student {
+        uint id;
+        string name;
+        uint age;
+        string department;
+        bool exists;   // used to check if student exists
+    }
+
+    // Mapping to store students by ID
+    mapping(uint => Student) private students;
+
+    // 2. Function to add a new student
+    function addStudent(
+        uint _id,
+        string memory _name,
+        uint _age,
+        string memory _department
+    ) public {
+        require(!students[_id].exists, "Student already exists");
+
+        students[_id] = Student(
+            _id,
+            _name,
+            _age,
+            _department,
+            true
+        );
+    }
+
+    // 3. Function to update an existing student
+    function updateStudent(
+        uint _id,
+        string memory _name,
+        uint _age,
+        string memory _department
+    ) public {
+        require(students[_id].exists, "Student does not exist");
+
+        students[_id].name = _name;
+        students[_id].age = _age;
+        students[_id].department = _department;
+    }
+
+    // 4. Function to get student data by ID
+    function getStudent(uint _id)
+        public
+        view
+        returns (uint, string memory, uint, string memory)
+    {
+        require(students[_id].exists, "Student does not exist");
+
+        Student memory s = students[_id];
+        return (s.id, s.name, s.age, s.department);
+    }
+}
